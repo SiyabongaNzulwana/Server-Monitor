@@ -1,0 +1,22 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "This is the back-end of the build monitor, the server in other words ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SiyabongaNzulwana/Server-Monitor.git"
+  },
+  "author": "Siyabonga Nzulwana",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SiyabongaNzulwana/Server-Monitor/issues"
+  },
+  "homepage": "https://github.com/SiyabongaNzulwana/Server-Monitor#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
