@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://github.com/SiyabongaNzulwana/Server-Monitor.git",
   "dependencies": {
+    "lodash": "^4.17.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "request": "^2.87.0"
