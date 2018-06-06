@@ -1,51 +1,84 @@
 import React, { Component } from 'react';
 import request from 'request';
-import logo from './logo.svg';
 import './App.css';
 import Block from './Block';
-import itemExists from './itemExists';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      response: []
-    }
-    this.callApi = this.callApi.bind(this);
-    this.changeState = this.changeState.bind(this);
+      endPointHistory: Array(6).fill(null),
+      endPoints: [
+        'https://cognition.dev.stackworx.cloud/api/status',
+        'https://github.com/request/request/',
+        'https://threejs.org/examples/webgl_objconvert_test.html',
+        'https://api.durf.dev.stackworx.io/health/',
+        'https://ord.dev.stackworx.io/health',
+        'https://prima.run/health'
+      ],
+      block: Array(6).fill({
+        url: '',
+        status: '',
+        lastPayload: null
+      })
+    };
+    this.serverStatus = this.serverStatus.bind(this);
+    this.checkServerStatus = this.checkServerStatus.bind(this);
   }
   componentDidMount() {
-    const urls = ['https://prima.run/health','https://cognition.dev.stackworx.cloud/api/status','https://api.durf.dev.stackworx.io/health','https://stackworx.io/'];
     setInterval(() => {
-      return this.callApi(urls)
-    }, 3000)
+      return this.checkServerStatus(this.state.endPoints)
+    }, 5000)
   }
 
-  changeState(response) {
-    console.log("Length: ", this.state.response.length)
-    if (response.statusCode === 200) {
-      this.setState(
-        previousState => {
-          response:  !itemExists(previousState.response, response) ?
-            previousState.response.push(response) : previousState.response}, () => localStorage.setItem('checkResult', JSON.stringify(response.statusCode)  ))
-      
-    }else{
-
-    };
-  }
-
-  callApi = async urls =>
-  urls.map(url => request(url, (error, response, body) => {
-      return {
-        response
-      };
-    }).on('response', response => {
-      this.changeState(response);
+  serverStatus = (url, index) =>
+    request({ uri: url, method: 'GET' }, (error, response, body) => {
+      let status = null;
+      if (error) {
+        status = 'OTHER';
+      } else if (response.statusCode === 200) {
+        status = 'UP';
+      } else {
+        status = 'DOWN';
+      }
+      this.setState(prevState => {
+        const urlHistory = [...prevState.endPointHistory];
+        const prevBlockInfo = [...prevState.block];
+        const info = {
+          url,
+          status,
+          lastPayload: prevBlockInfo[index].status
+        };
+        prevBlockInfo[index] = info;
+        urlHistory[index] = status;
+        return {
+          block: prevBlockInfo,
+          urlHistory
+        }
+      })
     })
-  );
+
+
+  checkServerStatus = (urls) => {
+    if (Array.isArray(urls) && urls.length > 0) {
+      urls.map((url, index) => {
+        this.serverStatus(url, index);
+      })
+    } else {
+      return <span>Oooops!</span>
+    }
+  }
+
   render() {
     return (
-      <Block response={this.state.response} />
+      <div className='block-container'>
+        {this.state.block.map(info => 
+          <Block key={Math.random()}
+            info={info}
+          />
+        )
+        }
+      </div>
     );
   }
 }

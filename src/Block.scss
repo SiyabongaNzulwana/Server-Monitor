@@ -1,0 +1,37 @@
+.block-container {
+    display: flex;
+    flex-wrap: wrap;
+    .block {
+        flex: 0 0 auto;
+        margin: 1em;
+        padding: 1.5em 1em;
+        border-radius: 5px;
+        justify-content: left;
+        width: 45%;
+        &:hover {
+            cursor: pointer;
+        }
+        &.green {
+            background: green;
+        }
+        &.red {
+            background: red;
+        }
+        &.grey {
+            background: grey;
+        }
+        .end-point-url {
+            padding-right:5em;
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    .block-container {
+        display: block;
+        .block {
+            width: 100%;
+            margin: 0 0 10px 0;
+        }
+    }
+}

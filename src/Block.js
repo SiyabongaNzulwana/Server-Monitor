@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
-
-const styles =  {
-  bg:  'background: red'
-}
-export default class Block extends Component {
-  
+import './Block.css';
+class Block extends Component {
   render() {
-    const { response } = this.props;
-    const { statusCode } = response;
+    const { info } = this.props;
+    let style = info.status === 'UP' ? 'green' : info.status === 'DOWN' ? 'red' : 'grey';
+    style += ' block';
     return (
-      <p>
-      {response.length > 0 && this.renderBlocks(response)}
-      </p>
-    )
-  }
-  renderBlocks(response) {
-    return response.map(response => <div className={response.statusCode !== 200 ? 'green': styles.bg}>{response.statusCode}</div>)
+      <div className={style} onClick={() => alert('Last Payload ' + info.lastPayload)}>
+        <div className="end-point-url">
+          <strong>Server:</strong> {info.url}
+        </div>
+        <div>
+          <strong>Status:</strong> {info.status}
+        </div>
+        <div>
+          <strong>Previous Status:</strong> {info.lastPayload}
+        </div>
+      </div>
+    );
   }
 }
+
+export default Block;
